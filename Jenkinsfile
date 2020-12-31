@@ -14,8 +14,8 @@ pipeline {
                         git credentialsId: 'gitlab-https', url: 'https://gitlab.com/poc-aws/terraform-infrastructure.git'
 
                         dir('remote-state') {
-                            sh "terraform init"
-                            sh "terraform apply -var-file='../../env/dev.tfvars' -auto-approve"
+                            sh "terraform init 2> /dev/null"
+                            sh "terraform apply -var-file='../../env/dev.tfvars' -auto-approve 2> /dev/null"
                         }
                     }
                 }
