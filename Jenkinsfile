@@ -14,8 +14,10 @@ pipeline {
                         git credentialsId: 'gitlab-https', url: 'https://gitlab.com/poc-aws/terraform-infrastructure.git'
 
                         dir('remote-state') {
-                            sh "terraform init 2> /dev/null"
-                            sh "terraform apply -var-file='../../env/dev.tfvars' -auto-approve 2> /dev/null"
+                            catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                                sh "terraform init"
+                                sh "terraform apply -var-file='../../env/dev.tfvars' -auto-approve"
+                            }
                         }
                     }
                 }
@@ -34,6 +36,11 @@ pipeline {
             stage ('Deploy DEV') { 
                 steps {
                     dir('terraform-infrastructure') {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                            sh "terraform init"
+                            sh "terraform workspace new dev"
+                        }
+
                         sh "terraform apply -var-file='../../env/dev.tfvars' -auto-approve"
                         sh "aws s3 cp ../build --recursive ${APPLICATION_NAME_DEV}"
                     }
