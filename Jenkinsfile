@@ -35,7 +35,7 @@ pipeline {
             }
             stage ('Deploy DEV') { 
                 steps {
-                    dir('terraform-infrastructure') {
+                    dir("terraform-infrastructure/applications/${APPLICATION_INFRA_NAME}") {
                         catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
                             sh "terraform init"
                             sh "terraform workspace new dev"
