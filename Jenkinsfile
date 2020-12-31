@@ -11,7 +11,7 @@ pipeline {
             stage('Setup Terraform Remote State') {
                 steps {
                     dir('terraform-infrastructure') {
-                        git credentialsId: 'gitlab-https', url: 'https://gitlab.com/poc-aws/terraform-frontend.git'
+                        git credentialsId: 'gitlab-https', url: 'https://gitlab.com/poc-aws/terraform-infrastructure.git'
 
                         dir('remote-state') {
                             sh "terraform apply -var-file='../../env/dev.tfvars' -auto-approve"
