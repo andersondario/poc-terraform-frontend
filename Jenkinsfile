@@ -41,7 +41,7 @@ pipeline {
                             sh "terraform workspace new dev"
                         }
 
-                        sh "terraform apply -var-file='../../env/dev.tfvars' -auto-approve"
+                        sh "terraform apply -var-file='${WORKSPACE}/env/dev.tfvars' -auto-approve"
                         sh "aws s3 cp ../build --recursive ${APPLICATION_NAME_DEV}"
                     }
                 }
