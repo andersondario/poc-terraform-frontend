@@ -16,7 +16,7 @@ pipeline {
                         dir('remote-state') {
                             catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
                                 sh "terraform init"
-                                sh "terraform apply -var-file='../../env/dev.tfvars' -auto-approve"
+                                sh "terraform apply -var-file='${WORKSPACE}/env/dev.tfvars' -auto-approve"
                             }
                         }
                     }
