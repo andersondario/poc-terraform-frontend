@@ -42,7 +42,7 @@ pipeline {
                         }
 
                         sh "terraform apply -var-file='${WORKSPACE}/env/dev.tfvars' -auto-approve"
-                        sh "aws s3 cp ../build s3://${APPLICATION_NAME_DEV} --recursive"
+                        sh "aws s3 cp ${WORKSPACE}/build s3://${APPLICATION_NAME_DEV} --recursive"
                     }
                 }
             }
@@ -55,7 +55,7 @@ pipeline {
                         }
 
                         sh "terraform apply -var-file='${WORKSPACE}/env/hml.tfvars' -auto-approve"
-                        sh "aws s3 cp ../build s3://${APPLICATION_NAME_HML} --recursive"
+                        sh "aws s3 cp ${WORKSPACE}/build s3://${APPLICATION_NAME_HML} --recursive"
                     }
                 }
             }
@@ -73,7 +73,7 @@ pipeline {
                         }
 
                         sh "terraform apply -var-file='${WORKSPACE}/env/prd.tfvars' -auto-approve"
-                        sh "aws s3 cp ../build s3://${APPLICATION_NAME_PRD} --recursive"
+                        sh "aws s3 cp ${WORKSPACE}/build s3://${APPLICATION_NAME_PRD} --recursive"
                     }
                 }
             }
