@@ -42,13 +42,21 @@ pipeline {
                         }
 
                         sh "terraform apply -var-file='${WORKSPACE}/env/dev.tfvars' -auto-approve"
-                        sh "aws s3 cp ../build ${APPLICATION_NAME_DEV} --recursive"
+                        sh "aws s3 cp ../build s3://${APPLICATION_NAME_DEV} --recursive"
                     }
                 }
             }
             stage ('Deploy HML') { 
                 steps {
-                    sh "echo skip"
+                    dir("terraform-infrastructure/applications/${APPLICATION_INFRA_NAME}") {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                            sh "terraform init"
+                            sh "terraform workspace new hml"
+                        }
+
+                        sh "terraform apply -var-file='${WORKSPACE}/env/hml.tfvars' -auto-approve"
+                        sh "aws s3 cp ../build s3://${APPLICATION_NAME_HML} --recursive"
+                    }
                 }
             }
             stage('Confirm deploy PRD') {
@@ -58,7 +66,15 @@ pipeline {
             }
             stage ('Deploy PRD') { 
                 steps {
-                    sh "echo skip"
+                    dir("terraform-infrastructure/applications/${APPLICATION_INFRA_NAME}") {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
+                            sh "terraform init"
+                            sh "terraform workspace new prd"
+                        }
+
+                        sh "terraform apply -var-file='${WORKSPACE}/env/prd.tfvars' -auto-approve"
+                        sh "aws s3 cp ../build s3://${APPLICATION_NAME_PRD} --recursive"
+                    }
                 }
             }
         }           
