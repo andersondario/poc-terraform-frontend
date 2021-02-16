@@ -11,7 +11,7 @@ pipeline {
             stage('Setup Terraform Remote State') {
                 steps {
                     dir('terraform-infrastructure') {
-                        git credentialsId: 'gitlab-https', url: 'https://github.com/andersondarioo/poc-terraform-infrastructure.gitt'
+                        git credentialsId: 'gitlab-https', url: 'https://github.com/andersondario/poc-terraform-infrastructure.gitt'
 
                         dir('remote-state') {
                             catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS') {
